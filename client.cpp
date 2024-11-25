@@ -4,7 +4,7 @@
 #include <stdio.h>
 #pragma comment(lib, "Ws2_32.lib")
 
-int main(){
+int main(){//TO DO: OOP
 WSADATA wsaData; 
 int result;
 
