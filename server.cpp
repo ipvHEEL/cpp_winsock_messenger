@@ -4,9 +4,9 @@
 #include <stdio.h>
 #pragma comment(lib, "Ws2_32.lib")
 
-int main(){
-WSADATA wsaData; 
-int result;
+int main(){// TODO:rewrite all code on OOP create a base class Server, implement message processing on the server  and a permanent connection between the server and the cients
+    WSADATA wsaData; 
+ int result;
 
 WSAStartup(MAKEWORD(2,2), &wsaData);
 SOCKADDR_IN addr;
