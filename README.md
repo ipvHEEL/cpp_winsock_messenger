@@ -49,6 +49,9 @@ network-app/
 ### 🔹 На Linux (сервер)
 
 1. Сохраните код сервера в файл `server_linux.cpp`.
+```
+git clone https://github.com/ipvHEEL/cpp_winsock_messenger.git
+```    
 2. Скомпилируйте:
    ```bash
    g++ server_linux.cpp -o server_linux
