@@ -33,6 +33,7 @@ public:
             printf("Vse norm");
         }
 
+        
         char msg[256];
         recv(Connection, msg, sizeof(msg), 0);  
         system("Pause");
