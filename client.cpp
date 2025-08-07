@@ -18,7 +18,27 @@ public:
         if (resultWSA != 0){
             return false;
         }
+        SOCKADDR_IN addr;
+        int sizeofaddr = sizeof(addr);
+        addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+        addr.sin_port = htons(1111);
+        addr.sin_family = AF_INET;
+        
+        SOCKET Connection = socket(AF_INET, SOCK_STREAM, 0);
+        
+        if (connect(Connection, (SOCKADDR*)&addr, sizeofaddr) == SOCKET_ERROR){
+            printf("Failed Client podkuchilsya");
+        }
+        else {
+            printf("Vse norm");
+        }
+
+        char msg[256];
+        recv(Connection, msg, sizeof(msg), 0);  
         system("Pause");
+        
+        
+        
         return true;
     }
 };
