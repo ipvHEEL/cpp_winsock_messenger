@@ -67,7 +67,6 @@ public:
         const char* reply = "Message Message!";
         send(clientSocket, reply, strlen(reply), 0);
 
-        // Cleanup
         closesocket(clientSocket);
         closesocket(serverSocket);
         WSACleanup();
