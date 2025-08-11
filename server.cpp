@@ -1,38 +1,84 @@
 #include <winsock2.h>
-#include <cstdio>
-#define DEFAULT_PORT "27015"
-#include <stdio.h>
+#include <iostream>
+#include <cstring>
 #pragma comment(lib, "Ws2_32.lib")
 
-int main(){// TODO:rewrite all code on OOP create a base class Server, implement message processing on the server  and a permanent connection between the server and the cients
-    WSADATA wsaData; 
- int result;
+class Server {
+public:
+    bool RunServer() {
+        WSADATA wsaData;
+        if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+            std::cout << "WSAStartup failed!" << std::endl;
+            return false;
+        }
 
-WSAStartup(MAKEWORD(2,2), &wsaData);
-SOCKADDR_IN addr;
-int sizeofaddr = sizeof(addr);
-addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-addr.sin_port = htons(1111);
-addr.sin_family = AF_INET;
+        SOCKET serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+        if (serverSocket == INVALID_SOCKET) {
+            std::cout << "Socket creation failed!" << std::endl;
+            WSACleanup();
+            return false;
+        }
 
-SOCKET sListen = socket(AF_INET, SOCK_STREAM, 0);
-bind(sListen, (SOCKADDR*)&addr, sizeof(addr));
-listen(sListen, SOMAXCONN);
+        sockaddr_in serverAddr;
+        serverAddr.sin_family = AF_INET;
+        serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1"); 
+        serverAddr.sin_port = htons(1111); 
 
+        if (bind(serverSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+            std::cout << "Bind failed!" << std::endl;
+            closesocket(serverSocket);
+            WSACleanup();
+            return false;
+        }
 
-SOCKET newConnection;
-newConnection = accept(sListen, (SOCKADDR*)&addr, &sizeofaddr);
-if(newConnection == 0 ){
-    printf("Error of users's connect\n");
-}
-else{
+        if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR) {
+            std::cout << "Listen failed!" << std::endl;
+            closesocket(serverSocket);
+            WSACleanup();
+            return false;
+        }
 
-printf("user's connection is already!\n");
+        std::cout << "Server listening on port 1111..." << std::endl;
 
-char msg[256] = "Hellows, its my first server";
-send(newConnection, msg, sizeof(msg), 0); 
+        sockaddr_in clientAddr;
+        int clientAddrSize = sizeof(clientAddr);
+        SOCKET clientSocket = accept(serverSocket, (SOCKADDR*)&clientAddr, &clientAddrSize);
 
-}   
-    system("pause");
+        if (clientSocket == INVALID_SOCKET) {
+            std::cout << "Accept failed!" << std::endl;
+            closesocket(serverSocket);
+            WSACleanup();
+            return false;
+        }
+
+        std::cout << "Client connected!" << std::endl;
+
+        
+        char buffer[256];
+        int bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
+        if (bytesReceived > 0) {
+            buffer[bytesReceived] = '\0';
+            std::cout << "mes: " << buffer << std::endl;
+        } else {
+            std::cout << "mes failed or connection closed." << std::endl;
+        }
+
+        
+        const char* reply = "Message Message!";
+        send(clientSocket, reply, strlen(reply), 0);
+
+        // Cleanup
+        closesocket(clientSocket);
+        closesocket(serverSocket);
+        WSACleanup();
+        std::cout << "Server shut down." << std::endl;
+        return true;
+    }
+};
+
+int main() {
+    Server server;
+    server.RunServer();
+    
     return 0;
 }
