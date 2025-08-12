@@ -1,6 +1,6 @@
 #include <wx/wx.h>
 #include <iostream>
-
+#include client.cpp
 
 
 class MainFrame : public wxFrame {
@@ -14,7 +14,6 @@ public:
                             "Help string");
         menuFile->AppendSeparator();
         menuFile->Append(wxID_EXIT);
-
         wxMenu *menuHelp = new wxMenu;
         menuHelp->Append(wxID_ABOUT);
         n_button = new wxButton(this, wxID_ANY, "password");
