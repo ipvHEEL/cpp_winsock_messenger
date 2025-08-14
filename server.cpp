@@ -65,7 +65,7 @@ public:
 
         
         const char* reply = "Message Message!";
-        send(clientSocket, reply, strlen(reply), 0);
+        
 
         closesocket(clientSocket);
         closesocket(serverSocket);
