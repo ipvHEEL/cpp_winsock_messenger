@@ -1,11 +1,6 @@
-#include <winsock2.h>
-#include <iostream>
-#include <cstring>
-#pragma comment(lib, "Ws2_32.lib")
+#include "client.h"
 
-class Client {
-public:
-    bool Connect() {
+bool Clinet::Connect() {
         WSADATA wsaData;
         if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
             std::cout << "WSAStartup failed!" << std::endl;
@@ -54,12 +49,4 @@ public:
         closesocket(sock);
         WSACleanup();
         return true;
-    }
-};
-
-int main() {
-    Client client;
-    client.Connect();
-
-    return 0;
-}
+    };
